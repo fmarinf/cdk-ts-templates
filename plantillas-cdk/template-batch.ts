@@ -24,34 +24,33 @@ const glueJob = new glue.CfnJob(stack, 'GlueJob', {
 
 // Crear una instancia de Athena y configurar una tabla para leer los datos
 const athenaDataCatalog = new athena.CfnNamedQuery(stack, 'AthenaDataCatalog', {
-    // Configuraciones del Data Catalog de Athena
-  });
-  
-  const athenaTable = new athena.CfnTable(stack, 'AthenaTable', {
-    // Configuraciones de la tabla de Athena
-  });
-  
-  // Crear una función Lambda que se ejecute cada vez que se suba un archivo CSV a S3
-  const lambdaFunc = new lambda.Function(stack, 'LambdaFunc', {
-    // Configuraciones de la función Lambda
-  });
-  
-  // Crear un flujo de trabajo StepFunctions para automatizar el proceso
-  const workflow = new stepfunctions.Workflow(stack, 'Workflow', {
-    // Configuraciones del flujo de trabajo
-  });
-  
-  // Agregar tareas al flujo de trabajo
-  workflow.addTask(new tasks.LambdaInvoke(lambdaFunc));
-  workflow.addTask(new tasks.GlueStartJobRun(glueJob));
-  workflow.addTask(new tasks.AthenaStartQueryExecution(athenaNamedQuery));
-  
-  // Configurar notificaciones S3 para iniciar el flujo de trabajo
-  const s3Notification = new s3_notifications.S3EventSource(inputBucket, {
-    events: [s3.EventType.OBJECT_CREATED],
-  });
-  s3Notification.bind(workflow);
-  
-  
-  
-  
+  // Configuraciones del Data Catalog de Athena
+});
+
+const athenaTable = new athena.CfnTable(stack, 'AthenaTable', {
+  // Configuraciones de la tabla de Athena
+});
+
+// Crear una función Lambda que se ejecute cada vez que se suba un archivo CSV a S3
+const lambdaFunc = new lambda.Function(stack, 'LambdaFunc', {
+  // Configuraciones de la función Lambda
+});
+
+// Crear un flujo de trabajo StepFunctions para automatizar el proceso
+const workflow = new stepfunctions.Workflow(stack, 'Workflow', {
+  // Configuraciones del flujo de trabajo
+});
+
+// Agregar tareas al flujo de trabajo
+workflow.addTask(new tasks.LambdaInvoke(lambdaFunc));
+workflow.addTask(new tasks.GlueStartJobRun(glueJob));
+workflow.addTask(new tasks.AthenaStartQueryExecution(athenaNamedQuery));
+
+// Configurar notificaciones S3 para iniciar el flujo de trabajo
+const s3Notification = new s3_notifications.S3EventSource(inputBucket, {
+  events: [s3.EventType.OBJECT_CREATED],
+});
+s3Notification.bind(workflow);
+
+
+
